@@ -36,6 +36,14 @@
   :group 'languages
   :prefix "poe-lootfilter-")
 
+(defcustom poe-lootfilter-section-regexp nil
+  "Regexp matching the comment marker used to describe sections.
+If non-nil, must be a regexp of one group that matches the section
+name.  Enables imenu for sections when set."
+  :type '(choice (const :tag "None" nil)
+                 (regexp :tag "Regexp"))
+  :group 'poe-lootfilter)
+
 (defface poe-lootfilter-condition-face
   '((t (:inherit font-lock-variable-name-face)))
   "Face for conditions (ItemLevel, DropLevel, etc)"
@@ -128,7 +136,10 @@
   :group 'poe-lootfiter
   :syntax-table poe-lootfilter-mode-syntax-table
   (setq font-lock-defaults '(poe-lootfilter-mode-fontlock-keywords))
-  (setq-local indent-line-function #'poe-lootfilter-indent-line))
+  (setq-local indent-line-function #'poe-lootfilter-indent-line)
+  (when poe-lootfilter-section-regexp
+    (setq imenu-generic-expression
+          `((nil ,poe-lootfilter-section-regexp 1)))))
 
 (provide 'poe-lootfilter-mode)
 
