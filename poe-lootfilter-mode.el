@@ -1,6 +1,4 @@
-;; -*- lexical-binding: t; -*-
-
-;;; poe-lootfilter-mode.el --- Major mode for editing Path of Exile lootfilters
+;;; poe-lootfilter-mode.el --- Major mode for editing Path of Exile lootfilters -*- lexical-binding: t; -*-
 
 ;; Copyright 2019 Jeremiah Dodds <jeremiah.dodds@gmail.com>
 
