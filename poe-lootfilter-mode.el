@@ -31,6 +31,11 @@
 
 ;;; Code:
 
+(defgroup poe-lootfilter nil
+  "Support for Path of Exile lootfilters <http://www.pathofexile.com>"
+  :group 'languages
+  :prefix "poe-lootfilter-")
+
 (defconst poe-lootfilter-condition-regexp
   (concat
    "^\\s-*"
@@ -79,6 +84,21 @@
       "Displays"
       "PlayEffect"))))
 
+(defconst poe-lootfilter-keyword-regexp
+  (regexp-opt '("Show" "Hide")))
+
+(defconst poe-lootfilter-mode-syntax-table
+  (let ((table (make-syntax-table)))
+    (modify-syntax-entry ?\" "\"" table)
+    (modify-syntax-entry ?# "<" table)
+    (modify-syntax-entry ?\n ">" table)
+    table))
+
+(defconst poe-lootfilter-mode-fontlock-keywords
+  `(,poe-lootfilter-keyword-regexp
+    (,poe-lootfilter-condition-regexp (0 font-lock-variable-name-face))
+    (,poe-lootfilter-command-regexp (0 font-lock-function-name-face))))
+
 (defun poe-lootfilter-indent-line ()
   "Indent the current line if we're inside a block."
   (interactive)
@@ -90,18 +110,15 @@
       (insert-tab))))
 
 ;;;###autoload
-(define-generic-mode poe-lootfilter-mode
-  '(?#)
-  '("Show" "Hide")
-  `((,poe-lootfilter-condition-regexp (0 font-lock-variable-name-face))
-    (,poe-lootfilter-command-regexp (0 font-lock-function-name-face)))
-  '("\\.filter$")
-  (list
-   (function
-    (lambda ()
-      (setq-local indent-line-function #'poe-lootfilter-indent-line)
-      (setq-local mode-name "lootfilter"))))
-  "Generic mode for Path of Exile item filters.")
+(add-to-list 'auto-mode-alist '("\\.filter$" . poe-lootfilter-mode))
+
+;;;###autoload
+(define-derived-mode poe-lootfilter-mode prog-mode "lootfilter"
+  "Major mode for editing Path of Exile loot filters."
+  :group 'poe-lootfiter
+  :syntax-table poe-lootfilter-mode-syntax-table
+  (setq font-lock-defaults '(poe-lootfilter-mode-fontlock-keywords))
+  (setq-local indent-line-function #'poe-lootfilter-indent-line))
 
 (provide 'poe-lootfilter-mode)
 
