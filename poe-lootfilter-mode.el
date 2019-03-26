@@ -36,6 +36,16 @@
   :group 'languages
   :prefix "poe-lootfilter-")
 
+(defface poe-lootfilter-condition-face
+  '((t (:inherit font-lock-variable-name-face)))
+  "Face for conditions (ItemLevel, DropLevel, etc)"
+  :group 'poe-lootfilter)
+
+(defface poe-lootfilter-command-face
+  '((t (:inherit font-lock-function-name-face)))
+  "Face for commands (SetFontSize, PlayEffect, etc)"
+  :group 'poe-lootfilter)
+
 (defconst poe-lootfilter-condition-regexp
   (concat
    "^\\s-*"
@@ -96,8 +106,8 @@
 
 (defconst poe-lootfilter-mode-fontlock-keywords
   `(,poe-lootfilter-keyword-regexp
-    (,poe-lootfilter-condition-regexp (0 font-lock-variable-name-face))
-    (,poe-lootfilter-command-regexp (0 font-lock-function-name-face))))
+    (,poe-lootfilter-condition-regexp (0 'poe-lootfilter-condition-face))
+    (,poe-lootfilter-command-regexp (0 'poe-lootfilter-command-face))))
 
 (defun poe-lootfilter-indent-line ()
   "Indent the current line if we're inside a block."
